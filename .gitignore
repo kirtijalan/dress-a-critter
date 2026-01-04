@@ -1,0 +1,13 @@
+# Python backend
+backend/venv/
+backend/__pycache__/
+backend/*.pyc
+
+# Environment files (global)
+.env
+.env.local
+.env.*.local
+
+# OS junk
+.DS_Store
+
