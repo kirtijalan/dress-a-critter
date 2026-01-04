@@ -3,12 +3,35 @@
 import { useState } from "react";
 import { ANIMALS, OUTFITS } from "@/constants/options";
 import { Animal, Outfit } from "@/types/domain";
+import { generatePrompt } from "@/lib/api";
+
 
 export default function Home() {
   const [animal, setAnimal] = useState<Animal | "">("");
   const [outfit, setOutfit] = useState<Outfit | "">("");
 
   const canGenerate = animal && outfit;
+
+  const [prompt, setPrompt] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const handleGenerate = async () => {
+  if (!animal || !outfit) return;
+
+  setLoading(true);
+  setPrompt(null);
+
+  try {
+    const result = await generatePrompt(animal, outfit);
+    setPrompt(result);
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong");
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-zinc-50 dark:bg-black flex items-center justify-center">
@@ -56,21 +79,24 @@ export default function Home() {
               </select>
             </div>
 
+            
             <button
-              disabled={!canGenerate}
+              onClick={handleGenerate}
+              disabled={!canGenerate || loading}
               className={`mt-4 h-12 rounded-md font-medium transition ${
-                canGenerate
-                  ? "bg-zinc-900 text-white hover:bg-zinc-800"
-                  : "bg-zinc-300 text-zinc-500 cursor-not-allowed"
+                canGenerate && !loading
+                ? "bg-zinc-900 text-white hover:bg-zinc-800"
+                : "bg-zinc-300 text-zinc-500 cursor-not-allowed"
               }`}
             >
-              Generate coloring page
+              {loading ? "Generating..." : "Generate coloring page"}
             </button>
           </section>
 
-          <section className="h-64 rounded-lg border border-dashed flex items-center justify-center text-zinc-400">
-            Preview will appear here
+          <section className="rounded-lg border p-4 text-sm whitespace-pre-wrap text-zinc-700 dark:text-zinc-300">
+            {prompt ? prompt : "Prompt preview will appear here"}
           </section>
+
         </div>
       </main>
     </div>
