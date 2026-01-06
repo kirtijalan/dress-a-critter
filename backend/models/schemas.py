@@ -9,3 +9,6 @@ class GenerateRequest(BaseModel):
 
 class PromptResponse(BaseModel):
     prompt: str
+
+class ImageResponse(BaseModel):
+    image_url: str

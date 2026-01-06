@@ -1,7 +1,16 @@
-# Python backend
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
 backend/venv/
-backend/__pycache__/
-backend/*.pyc
+
+# Environment variables
+.env
+.env.*
 
 # Environment files (global)
 .env
